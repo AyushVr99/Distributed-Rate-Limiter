@@ -7,8 +7,8 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-BASE_URL="http://localhost:8080/hello"
-CAPACITY=100
+BASE_URL="http://localhost:8082/hello"
+CAPACITY=10
 REFILL_RATE=5
 
 echo -e "${BLUE}========================================${NC}"
@@ -46,12 +46,12 @@ echo ""
 
 # Test 3: Rapid requests to hit rate limit
 echo -e "${YELLOW}Test 3: Rapid Requests (Testing Rate Limit)${NC}"
-echo "Sending 150 rapid requests (capacity is $CAPACITY)..."
+echo "Sending 20 rapid requests (capacity is $CAPACITY)..."
 echo ""
 
 success_count=0
 rate_limited_count=0
-total_requests=150
+total_requests=20
 
 for i in $(seq 1 $total_requests); do
     response=$(curl -s -w "\n%{http_code}" "$BASE_URL")
@@ -63,8 +63,8 @@ for i in $(seq 1 $total_requests); do
         ((rate_limited_count++))
     fi
     
-    # Show progress every 25 requests
-    if [ $((i % 25)) -eq 0 ]; then
+    # Show progress every 5 requests
+    if [ $((i % 5)) -eq 0 ]; then
         echo -e "Progress: $i/$total_requests requests (${GREEN}$success_count${NC} success, ${RED}$rate_limited_count${NC} rate limited)"
     fi
 done
@@ -179,7 +179,7 @@ echo ""
 # Make requests until we get rate limited
 rate_limited=false
 requests_made=0
-while [ "$rate_limited" == false ] && [ $requests_made -lt 200 ]; do
+while [ "$rate_limited" == false ] && [ $requests_made -lt 20 ]; do
     response=$(curl -s -w "\n%{http_code}" "$BASE_URL")
     http_code=$(echo "$response" | tail -n1)
     ((requests_made++))
@@ -217,6 +217,6 @@ echo "  Capacity: $CAPACITY tokens"
 echo "  Refill Rate: $REFILL_RATE tokens/second"
 echo ""
 echo "To test manually:"
-echo "  curl -v http://localhost:8080/hello"
-echo "  curl -H 'X-API-KEY: my-key' http://localhost:8080/hello"
-echo "  curl -H 'X-USER-ID: user123' http://localhost:8080/hello"
+echo "  curl -v http://localhost:8082/hello"
+echo "  curl -H 'X-API-KEY: my-key' http://localhost:8082/hello"
+echo "  curl -H 'X-USER-ID: user123' http://localhost:8082/hello"

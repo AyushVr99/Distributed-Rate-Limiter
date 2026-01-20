@@ -1,11 +1,12 @@
 server:
-  port: 8080
+  port: 8082
 
 spring:
-  redis:
-    host: localhost
-    port: 6379
-    timeout: 2000ms
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: ${SPRING_DATA_REDIS_TIMEOUT:2000ms}
 
 rate-limiter:
   capacity: 10
